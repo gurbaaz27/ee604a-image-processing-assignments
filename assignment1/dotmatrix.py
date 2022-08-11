@@ -17,7 +17,6 @@ from typing import Tuple
 import numpy as np
 from PIL import Image
 
-log = None
 digits_pattern = {
     0: [0, 1, 2, 3, 5, 6, 8, 9, 11, 12, 13, 14],
     1: [2, 5, 8, 11, 14],

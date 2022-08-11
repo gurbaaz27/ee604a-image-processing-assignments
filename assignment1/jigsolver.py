@@ -1,15 +1,15 @@
 """
 Usage:
     pip install numpy pillow
-    python dotmatrix.py n_d
-    , where n_d \in {00,01,..,99}
+    python jigsolver.py ./jigsolver.jpg
 """
 __author__ = "Gurbaaz Singh Nandra"
 __rollno__ = 190349
-__filename__ = "dotmatrix.py"
-__description__ = """dotmatrix.py, which accepts command line docking station number 
-nd ∈ {00, 01, ..., 99} and directly stores the dotmatrix.jpg file at current location"""
+__filename__ = "jigsolver.py"
+__description__ = """jigsolver.py, which accepts command line file path for input jigsaw.jpg and 
+directly stores the jigsolved.jpg file at current location where the command is being executed"""
 
+import os
 import sys
 import argparse
 import traceback
@@ -17,86 +17,85 @@ from typing import Tuple
 import numpy as np
 from PIL import Image
 
-log = None
-digits_pattern = {
-    0: [0, 1, 2, 3, 5, 6, 8, 9, 11, 12, 13, 14],
-    1: [2, 5, 8, 11, 14],
-    2: [0, 1, 2, 5, 6, 7, 8, 9, 12, 13, 14],
-    3: [0, 1, 2, 5, 6, 7, 8, 11, 12, 13, 14],
-    4: [0, 2, 3, 5, 6, 7, 8, 11, 14],
-    5: [0, 1, 2, 3, 6, 7, 8, 11, 12, 13, 14],
-    6: [0, 1, 2, 3, 6, 7, 8, 9, 11, 12, 13, 14],
-    7: [0, 1, 2, 5, 8, 11, 14],
-    8: [0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14],
-    9: [0, 1, 2, 3, 5, 6, 7, 8, 11, 12, 13, 14],
-}
 
-circles_centers = []
+def flip_image(A: np.ndarray, xy: Tuple, hw: Tuple, horizontal=True) -> np.ndarray:
+    x, y = xy
+    h, w = hw
 
-for i in [30, 90, 150, 210, 270]:
-    for j in [65, 125, 185]:
-        circles_centers.append((i, j))
+    if horizontal:
+        for i in range(x, x + h):
+            itr = 0
+            for j in range(y, y + (w // 2)):
+                temp = np.copy(A[(i, j)])
+                A[(i, j)] = A[(i, y + w - 1 - itr)]
+                A[(i, y + w - 1 - itr)] = temp
+                itr += 1
 
-
-def shift_offset(cc: Tuple) -> Tuple:
-    x, y = cc
-    return (x, y + 250)
-
-
-def draw_circle(A: np.ndarray, center: Tuple, radius: int) -> np.ndarray:
-    x0, y0 = center
-
-    for i in range(x0 - radius, x0 + radius):
-        for j in range(y0 - radius, y0 + radius):
-            if (i - x0) ** 2 + (j - y0) ** 2 <= radius**2:
-                A[(i, j)] = 1
+    else:
+        for i in range(y, y + w):
+            itr = 0
+            for j in range(x, x + (h // 2)):
+                temp = np.copy(A[(j, i)])
+                A[(j, i)] = A[(x + h - 1 - itr, i)]
+                A[(x + h - 1 - itr, i)] = temp
+                itr += 1
 
     return A
 
 
-def draw_digits(A: np.ndarray, pattern: str) -> np.ndarray:
-    global circles_centers
-    global digits_pattern
+def swap_image(
+    A: np.ndarray, xy1: Tuple, hw1: Tuple, xy2: Tuple, hw2: Tuple
+) -> np.ndarray:
+    x1, y1 = xy1
+    h1, w1 = hw1
+    x2, y2 = xy2
+    h2, w2 = hw2
 
-    for i, p in enumerate(pattern):
-        for dp in digits_pattern[int(p)]:
-            circle_center = circles_centers[dp]
+    for i in range(min(h1, h2)):
+        for j in range(min(w1, w2)):
+            temp = np.copy(A[(x1 + i, y1 + j)])
+            A[(x1 + i, y1 + j)] = A[(x2 + i, y2 + j)]
+            A[(x2 + i, y2 + j)] = temp
 
-            if i == 1:
-                circle_center = shift_offset(circle_center)
+    return A
 
-            A = draw_circle(A, circle_center, 25)
+
+def solve_jigsaw(A: np.ndarray) -> np.ndarray:
+    A = flip_image(A, (370, 370), (51, 427), False)
+    A = flip_image(A, (150, 515), (179, 185))
+    A = flip_image(A, (200, 0), (210, 190), False)
+    A = swap_image(A, (0, 0), (200, 190), (200, 0), (210, 190))
 
     return A
 
 
 def save_image(A: np.ndarray, filename: str):
-    Image.fromarray(A * 255).convert("L").save(filename)
+    Image.fromarray(A).save(filename)
 
 
 def main():
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            "n_d",
+            "filepath",
             type=str,
-            help="Docking station number nd ∈ {00, 01, ..., 99}",
+            help="file path for input jigsaw.jpg",
         )
         args = parser.parse_args()
 
-        if not len(args.n_d) == 2 or not args.n_d.isnumeric():
-            print(
-                "Please enter two digit docking station number as nd ∈ {00, 01, ..., 99}"
-            )
+        if not os.path.exists(args.filepath):
+            print("Please enter valid file path for input jigsaw.jpg")
             return -1
 
-        A = np.zeros((300, 500))
+        A = np.array(Image.open(args.filepath))
 
-        A = draw_digits(A, args.n_d)
+        print(A.shape)
 
-        save_image(A, "dotmatrix.jpg")
+        A = solve_jigsaw(A)
 
-        print("Dotmatrix image generated and saved successfully as dotmatrix.jpg")
+        save_image(A, "jigsolved.jpg")
+
+        print("Jigsaw image solved and saved successfully as jigsolved.jpg")
 
     except:
         traceback.print_exc()
