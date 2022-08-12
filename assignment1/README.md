@@ -66,6 +66,14 @@ python jigsolver.py ./jigsaw.jpg
 
 3. `cycloneanalyzer.ipynb`
 
+Open the jupyter notebook on [Google Colab](https://colab.research.google.com/) or on local machine's `localhost`
+
 ```bash
-TBA
+jupyter notebook cycloneanalyzer.ipynb
+```
+
+or simply execute complete code with
+
+```bash
+jupyter run cycloneanalyzer.ipynb
 ```
