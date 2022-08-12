@@ -1,10 +1,12 @@
 # Assignment 1
 
-> Gurbaaz Singh Nandra
+## Submission
 
-> 190349
+Name: Gurbaaz Singh Nandra
 
-> 28th August 2022
+Roll No.: 190349
+
+Date: 28th August 2022
 
 ## Setup
 
