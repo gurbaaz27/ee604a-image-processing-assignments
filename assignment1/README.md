@@ -1,7 +1,9 @@
 # Assignment 1
 
 > Gurbaaz Singh Nandra
+
 > 190349
+
 > 28th August 2022
 
 ## Setup
@@ -36,6 +38,7 @@ e.g.
 python dotmatrix.py 42
 ```
 
+![](./dotmatrix.jpg)
 
 2. `jigsolver.py`
 
@@ -57,8 +60,10 @@ e.g.
 python jigsolver.py ./jigsaw.jpg
 ```
 
+![](./jigsolved.jpg)
+
 3. `cycloneanalyzer.ipynb`
 
 ```bash
-tba
+TBA
 ```
