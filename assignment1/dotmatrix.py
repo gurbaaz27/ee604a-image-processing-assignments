@@ -12,7 +12,6 @@ nd ∈ {00, 01, ..., 99} and directly stores the dotmatrix.jpg file at current l
 
 import sys
 import argparse
-import traceback
 from typing import Tuple
 import numpy as np
 from PIL import Image
@@ -96,9 +95,11 @@ def main():
         save_image(A, "dotmatrix.jpg")
 
         print("Dotmatrix image generated and saved successfully as dotmatrix.jpg")
+        return 0
 
-    except:
-        traceback.print_exc()
+    except Exception as e:
+        print(e)
+        return -1
 
 
 if __name__ == "__main__":

@@ -12,7 +12,6 @@ directly stores the jigsolved.jpg file at current location where the command is 
 import os
 import sys
 import argparse
-import traceback
 from typing import Tuple
 import numpy as np
 from PIL import Image
@@ -89,16 +88,16 @@ def main():
 
         A = np.array(Image.open(args.filepath))
 
-        print(A.shape)
-
         A = solve_jigsaw(A)
 
         save_image(A, "jigsolved.jpg")
 
         print("Jigsaw image solved and saved successfully as jigsolved.jpg")
+        return 0
 
-    except:
-        traceback.print_exc()
+    except Exception as e:
+        print(e)
+        return -1
 
 
 if __name__ == "__main__":
