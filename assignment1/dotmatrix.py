@@ -82,7 +82,7 @@ def main():
         )
         args = parser.parse_args()
 
-        if not len(args.n_d) == 2 or not args.n_d.isnumeric():
+        if not len(args.n_d) == 2 or not args.n_d.isnumeric() or args.n_d[0] == "-":
             print(
                 "Please enter two digit docking station number as nd ∈ {00, 01, ..., 99}"
             )
