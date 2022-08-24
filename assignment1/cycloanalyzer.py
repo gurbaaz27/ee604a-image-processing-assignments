@@ -155,6 +155,12 @@ def find_tangent(c: Tuple, p: Tuple) -> Tuple:
     return (m, c)
 
 
+def find_line(c: Tuple, p: Tuple) -> Tuple:
+    m = (c[1] - p[1]) / (c[0] - p[0])
+    c = p[1] - m * p[0]
+    return (m, c)
+
+
 def distance(a: Tuple, b: Tuple) -> float:
     return np.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
 
@@ -243,6 +249,18 @@ for tangent in tangents:
 m1, c1, m2, c2 = *tangents[0], *tangents[1]
 
 poi = int((c2 - c1) / (m1 - m2)), int((m1 * c2 - m2 * c1) / (m1 - m2))
+
+ni = draw_circle(ni, poi, 4, (0, 255, 255))
+
+m1, c1, m2, c2 = *find_line(red_dots[2][0], red_dots[1][0]), *find_line(red_dots[2][1], red_dots[1][1])
+
+poi = int((c2 - c1) / (m1 - m2)), int((m1 * c2 - m2 * c1) / (m1 - m2))
+
+for m_c in [(m1, c1), (m2, c2)] :
+    for i in range(ni.shape[0]):
+        for j in range(ni.shape[1]):
+            if satisfy_line(m_c, (i, j)):
+                ni[(i, j)] = (165, 42, 42)
 
 ni = draw_circle(ni, poi, 4, (0, 255, 255))
 

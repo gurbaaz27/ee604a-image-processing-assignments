@@ -59,11 +59,36 @@ def swap_image(
     return A
 
 
+def mirror_padding(A: np.ndarray, xy: Tuple, hw: Tuple) -> np.ndarray:
+    x, y = xy
+    h, w = hw
+
+    for i in range(h // 2):
+        for j in range(w):
+            A[(x + i, y + j)] = A[(x - i - 1, y + j)]
+
+    for i in range(h // 2):
+        for j in range(w):
+            A[(x + h - i - 1, y + j)] = A[(x + h + i, y + j)]
+
+#    for j in range(w):
+ #       A[(x + h // 2, y + j)] = ( A[(x + h // 2 - 1, y + j)] + A[(x + h // 2 + 1, y + j)] ) // 2
+
+    return A
+
+
 def solve_jigsaw(A: np.ndarray) -> np.ndarray:
     A = flip_image(A, (370, 370), (51, 427), False)
     A = flip_image(A, (150, 515), (179, 185))
     A = flip_image(A, (200, 0), (210, 190), False)
     A = swap_image(A, (0, 0), (200, 190), (200, 0), (210, 190))
+    
+    for i in range(200, 400):
+        for j in range(190):
+            pxl = A[(i, j)]
+            pxl[1], pxl[2] = pxl[2], pxl[1]
+
+    A = mirror_padding(A, (400, 0), (10, 190))
 
     return A
 
