@@ -252,11 +252,13 @@ poi = int((c2 - c1) / (m1 - m2)), int((m1 * c2 - m2 * c1) / (m1 - m2))
 
 ni = draw_circle(ni, poi, 4, (0, 255, 255))
 
-m1, c1, m2, c2 = *find_line(red_dots[2][0], red_dots[1][0]), *find_line(red_dots[2][1], red_dots[1][1])
+m1, c1, m2, c2 = *find_line(red_dots[2][0], red_dots[1][0]), *find_line(
+    red_dots[2][1], red_dots[1][1]
+)
 
 poi = int((c2 - c1) / (m1 - m2)), int((m1 * c2 - m2 * c1) / (m1 - m2))
 
-for m_c in [(m1, c1), (m2, c2)] :
+for m_c in [(m1, c1), (m2, c2)]:
     for i in range(ni.shape[0]):
         for j in range(ni.shape[1]):
             if satisfy_line(m_c, (i, j)):
