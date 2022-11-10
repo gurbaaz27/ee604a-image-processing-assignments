@@ -54,8 +54,8 @@ class BilateralUpsample:
 
         for x in range(-self.dim, self.dim + 1):
             for y in range(-self.dim, self.dim + 1):
-                x1 = 2 * np.pi * (self.sigma**2)
-                x2 = np.exp(-(x**2 + y**2) / (2 * self.sigma**2))
+                x1 = 2 * np.pi * ((self.sigma*self.sampling_rate)**2)
+                x2 = np.exp(-(x**2 + y**2) / (2 * (self.sigma*self.sampling_rate)**2))
                 self.gaussian_kernel[x + self.dim, y + self.dim] = (1 / x1) * x2
 
     def pad_image(self, image: np.ndarray):

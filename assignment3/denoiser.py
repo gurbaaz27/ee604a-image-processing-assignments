@@ -87,7 +87,7 @@ class BilateralFilter:
 def denoise_image(img):
     img = np.array(img).astype(float)
 
-    bilateral_filter = BilateralFilter(img, kernel_size=11, sigma=7, sigma_r=20)
+    bilateral_filter = BilateralFilter(img, kernel_size=13, sigma=9, sigma_r=30)
     bilateral_filter.prepare()
     bilateral_filter.apply_filter()
 
